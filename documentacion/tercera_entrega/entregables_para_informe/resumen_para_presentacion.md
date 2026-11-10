@@ -33,7 +33,9 @@ Temporalidad no demostrada | 71 % mora | score sin diccionario | test ya usado e
 
 ## Streamlit
 
-Demo: mismo `pipeline_logistica_B.joblib`, 11 variables, umbrales en JSON.
+**Por qué (1 frase oral):** la guía §8.3 pide despliegue básico; Streamlit encaja con Python/sklearn, muestra el mismo pipeline en vivo y permite cambiar el umbral en la sustentación sin otro servidor.
+
+Demo: mismo `pipeline_logistica_B.joblib`, 11 variables, umbrales en JSON. Código: `codigo/app_streamlit/`.
 
 ## Archivos en esta carpeta
 

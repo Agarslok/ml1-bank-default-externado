@@ -3,7 +3,9 @@
 **Equipo:** Juan Angel Triana, Isabella Pensamiento · **Profesora:** Juliana De Mier  
 **Tema:** Riesgo de mora (Perú, Kaggle) · **Modelo final:** regresión logística, escenario B (11 variables), `SEED=42`.
 
-Repositorio privado para compartir código, informe LaTeX, salidas y demo Streamlit de la **entrega final (Fase 3)**.
+Repositorio **privado** para compartir código, informe LaTeX, salidas y demo Streamlit de la **entrega final (Fase 3)**.
+
+**Remoto:** https://github.com/Agarslok/ml1-bank-default-externado (invitar a colaboradores desde *Settings → Collaborators*).
 
 ## Mapa del proyecto
 
