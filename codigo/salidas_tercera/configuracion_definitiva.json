@@ -17,5 +17,7 @@
   "balanceo": "ninguno",
   "semilla": 42,
   "particion": "80/20 estratificada",
-  "k_knn_referencia_cv": 151
+  "k_knn_referencia_cv": 151,
+  "scikit_learn_version": "1.9.1",
+  "imbalanced_learn_version": "0.14.2"
 }

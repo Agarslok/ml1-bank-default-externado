@@ -330,6 +330,9 @@ def run_entrega_final(out_dir: Path) -> dict:
     pipe_final.fit(X_tr[cols_b], y_tr)
     joblib.dump(pipe_final, out_dir / "pipeline_logistica_B.joblib")
 
+    import sklearn
+    import imblearn
+
     config = {
         "modelo": "LogisticRegression(C=1e6, max_iter=5000)",
         "escenario": ESC_PRINCIPAL_KEY,
@@ -338,6 +341,8 @@ def run_entrega_final(out_dir: Path) -> dict:
         "semilla": SEED,
         "particion": "80/20 estratificada",
         "k_knn_referencia_cv": k_mejor,
+        "scikit_learn_version": sklearn.__version__,
+        "imbalanced_learn_version": imblearn.__version__,
     }
     (out_dir / "configuracion_definitiva.json").write_text(
         json.dumps(config, indent=2, ensure_ascii=False), encoding="utf-8"

@@ -107,7 +107,7 @@ Cualquier número distinto en la entrega final debe explicarse por error de tran
 |-------|---------|
 | **Dónde se elige** | Solo con probabilidades **out-of-fold del entrenamiento** (misma logística, escenario B, CV 5 folds, semilla 42) |
 | **Youden (referencia)** | Maximizar \(J = \mathrm{TPR} - \mathrm{FPR}\) → umbral ≈ **0,71** (ya calculado en 2.ª entrega) |
-| **Negocio (nuevo en Fase 3)** | Escenarios de costo simbólico: ratio costo(FN)/costo(FP) ∈ **{2, 5}** (y opcional referencia Youden). **No** buscar el umbral que minimiza costo en test |
+| **Negocio (nuevo en Fase 3)** | Escenarios de costo simbólico: ratio costo(FN)/costo(FP) ∈ **{1, 2, 5}** (más convención 0,5 y Youden OOF). **No** buscar el umbral que minimiza costo en test |
 | **Lectura** | El umbral correcto depende del costo relativo de dejar pasar un moroso frente a rechazar un buen pagador. La base no trae costos monetarios reales |
 
 ---

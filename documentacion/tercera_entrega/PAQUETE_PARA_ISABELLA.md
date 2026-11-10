@@ -1,6 +1,15 @@
 # Paquete para Isabella (entrega final)
 
-Juan — listado de archivos actualizados tras correcciones del review.
+Juan — listado para compartir (repartición Fase 3). Todo está en el repo privado; rutas locales abajo.
+
+**Checklist de envío**
+- [x] `codigo/app_streamlit/app.py` (+ `paths.py`, `requirements.txt`, `README.md`)
+- [x] `codigo/tercera/tercera_entrega_lib.py` (Streamlit / regenerar salidas; el notebook no lo importa)
+- [x] `documentacion/tercera_entrega/contrato_decisiones.md` (§5 con **r ∈ {1, 2, 5}**)
+- [x] `documentacion/tercera_entrega/entregables_para_informe/resumen_para_presentacion.md`
+- [x] `codigo/tercera/tercera_entrega_modelamiento_final_ejecutado.ipynb` (con salidas)
+- [x] `codigo/salidas_tercera/` completa → `tabla_test_umbrales_solo_lectura.csv`
+- [ ] PDF nuevo desde Overleaf (`main.tex` actualizado) — pendiente compilar
 
 ## Código y datos
 

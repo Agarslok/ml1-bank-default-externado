@@ -21,6 +21,25 @@ Debe existir al menos uno de:
 - `codigo/salidas_tercera/pipeline_logistica_B.joblib`
 - `documentacion/tercera_entrega/entregables_para_informe/pipeline_logistica_B.joblib`
 
+## Versiones de librerías (compatibilidad con `joblib`)
+
+El `pipeline_logistica_B.joblib` se guardó y se probó con:
+
+| Librería | Versión |
+|----------|---------|
+| **scikit-learn** | **1.9.1** |
+| **imbalanced-learn** | **0.14.2** |
+
+Si al ejecutar la app aparece un aviso de incompatibilidad de versiones, instale las mismas versiones antes de cargar el modelo (también en Colab):
+
+```powershell
+pip install scikit-learn==1.9.1 imbalanced-learn==0.14.2
+```
+
+La versión exacta queda registrada en `configuracion_definitiva.json` (`scikit_learn_version`, `imbalanced_learn_version`).
+
+Si el `joblib` lo generaste en **Colab**, ejecuta allí `import sklearn; print(sklearn.__version__)` y usa **esa** misma versión al correr la app (puede diferir de 1.9.1 local).
+
 ## Instalación
 
 Desde la carpeta del proyecto (recomendado usar un entorno virtual):

@@ -96,8 +96,8 @@ def main():
     except FileNotFoundError as e:
         st.error(str(e))
         st.info(
-            "Ejecute primero `python codigo/tercera/tercera_entrega_lib.py` "
-            "o `python codigo/tercera_entrega_lib.py` para generar el pipeline."
+            "Ejecute el notebook de tercera entrega o "
+            "`python codigo/tercera/tercera_entrega_lib.py` para generar el pipeline."
         )
         sys.exit(1)
 
@@ -107,6 +107,13 @@ def main():
         etiqueta = st.selectbox("Umbral operativo", list(opciones.keys()))
         t, ayuda_umbral = opciones[etiqueta]
         st.caption(ayuda_umbral)
+        if "2×" in etiqueta or "5×" in etiqueta:
+            st.warning(
+                "Con este corte el modelo suele marcar **riesgo a casi todos** "
+                "(en OOF coincide con rechazar prácticamente a todos los buenos pagadores, "
+                "casi igual que la línea base). Sirve para ver el extremo del costo FN alto; "
+                "para decisiones distintas use **r = 1×** o **Youden**."
+            )
         st.divider()
         st.markdown(DISCLAIMER)
         with st.expander("Artefactos cargados"):

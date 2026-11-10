@@ -67,7 +67,7 @@
 \vspace{0.3cm}
 {\large Regresión Logística en el Contexto Latinoamericano\par}
 \vspace{0.3cm}
-{Entrega Final -- Proyecto Integrador\par}
+{Entrega Final (Proyecto Integrador)\par}
 \vspace{0.2cm}
 {\normalsize Fase 3: consolidación, despliegue y comunicación\par}
 \vspace{0.4cm}
@@ -234,20 +234,20 @@ Log.\ (Youden OOF) & 0,722 & 0,840 & 0,689 & 0,822 & 0,634 & 268 \\
 \end{tabular}
 \end{table}
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.85\textwidth]{fig_roc.png}
-\caption{Curvas ROC en prueba (2.ª entrega).}
-\label{fig:roc}
-\end{figure}
-
-\noindent La Figura~\ref{fig:roc} resume discriminación sin umbral. Las curvas ROC y precision--recall en prueba corresponden al cierre de la 2.ª entrega.
+\noindent Las curvas de la Figura~\ref{fig:rocpr} resumen discriminación sin fijar umbral (cierre 2.ª entrega). Con prevalencia $\approx$71\% la PR-AUC alta refleja en parte la clase mayoritaria; el comité debe leer sensibilidad y falsos positivos al elegir corte.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.85\textwidth]{fig_pr.png}
-\caption{Curvas precision--recall en prueba. Línea de prevalencia $\approx$0,71.}
-\label{fig:pr}
+\begin{minipage}{0.48\textwidth}
+\centering
+\includegraphics[width=\linewidth]{fig_roc.png}
+\end{minipage}\hfill
+\begin{minipage}{0.48\textwidth}
+\centering
+\includegraphics[width=\linewidth]{fig_pr.png}
+\end{minipage}
+\caption{ROC y precision--recall en prueba (regresión logística y comparadores, 2.ª entrega).}
+\label{fig:rocpr}
 \end{figure}
 
 \section{Umbrales: Youden y escenarios de costo (OOF)}
@@ -275,7 +275,7 @@ Costo $r=5$ (mín. en OOF) & 0,14 & 0 & 1404 & 1404 & 1404 & 1404 & 0,004 \\
 \end{tabular}
 \end{table}
 
-La línea base fija $C = 1409$ para cualquier $r$ porque FN$=0$. Con $r=1$ el modelo reduce el costo a 1302 frente a 1409. Con $r=2$ el costo mínimo (1392) queda apenas por debajo de la línea base. Con $r=5$ el óptimo (1404) casi coincide con la línea base: la decisión binaria vuelve a rechazar prácticamente a todos los buenos pagadores. \textbf{El aporte del modelo para el comité no es solo el corte binario extremo, sino el ordenamiento por score y umbrales intermedios} (p.\,ej.\ Youden o $r=1$), donde sí cambian FN y FP de forma distinguible.
+La línea base fija $C = 1409$ para cualquier $r$ porque FN$=0$. Con $r=1$ el modelo reduce el costo total a 1302 frente a 1409: ahí el corte binario \textbf{sí} aporta frente a rechazar a todos. Con $r=2$ el costo mínimo (1392) queda apenas por debajo de la línea base; con $r=5$ el óptimo (1404) casi coincide con 1409 y la especificidad cae a 0,004 (casi todos marcados como mora). \textbf{Mensaje para el comité:} cuando el falso negativo se pesa mucho más que el falso positivo ($r=2$ o $r=5$), el mejor umbral en OOF empuja a una regla casi igual a la línea base. El modelo \textbf{solo aporta de forma clara} si los dos errores tienen costos del mismo orden ($r=1$) o si el comité usa el \textbf{score para ordenar} y umbrales intermedios (Youden, $r=1$), no solo el extremo $r=5$.
 
 \begin{figure}[H]
 \centering
@@ -312,9 +312,12 @@ Quitar \texttt{score} reduce poco el AUC. Mantenemos B pero documentamos la salv
 Los coeficientes de la logística B (Figura~\ref{fig:coef}) son \textbf{asociaciones} en esta muestra, lineales en el \textbf{logit}. No son causas. Para un comité de riesgo, una lectura operativa es:
 
 \begin{itemize}
-\item Mayor \texttt{score}, \texttt{nivel\_ahorro}, experiencia en el sistema (\texttt{exp\_sf}) o educación universitaria van con \textbf{menor} score de riesgo relativo en esta base. Subir una desviación estándar en \texttt{score} (con las demás fijas) se asocia con menor log-odds de mora.
-\item Mayor \texttt{deuda\_sf} o reportar vivienda propia (frente a alquilada, categoría de referencia) va con \textbf{mayor} riesgo relativo, aunque los efectos son modestos frente a \texttt{score} y educación.
-\item El modelo no sustituye política de crédito: ordena solicitudes para revisión manual. Un odds ratio mayor que 1 indica que, en esta muestra, el factor acompaña más mora que la referencia, no que ``cause'' el impago.
+\item \textbf{Score crediticio (\texttt{score}):} coeficiente negativo en logit $\Rightarrow$ un score más alto se asocia con \textbf{menor} índice de riesgo relativo del modelo. En lenguaje de comité: mejor historial resumido en \texttt{score} $\rightarrow$ prioridad de revisión más baja, \textbf{ceteris paribus}.
+\item \textbf{Ahorro y estabilidad:} mayor \texttt{nivel\_ahorro}, más \texttt{exp\_sf} o más \texttt{dias\_lab} acompañan menor riesgo relativo; ayudan a ordenar cola de solicitudes, no sustituyen política de cupos.
+\item \textbf{Carga de deuda:} mayor \texttt{deuda\_sf} $\rightarrow$ mayor riesgo relativo (más exposición en el sistema). Útil para alertar perfiles ya muy apalancados antes del desembolso.
+\item \textbf{Perfil socioeconómico:} categorías de \texttt{vivienda}, \texttt{zona} y \texttt{nivel\_educ} se codifican respecto a referencias aprendidas en entrenamiento; un nivel educativo distinto al de referencia puede subir o bajar el logit en esta muestra.
+\item \textbf{Odds ratio (lectura bancaria):} si el OR de una categoría es $>1$, en esta muestra ese grupo tuvo más mora que la referencia tras el ajuste lineal; si $<1$, menos. Son \textbf{asociaciones}, no causas ni montos en soles.
+\item El modelo \textbf{ordena} la cartera para revisión manual; el comité define umbral, costos y excepciones.
 \end{itemize}
 
 \begin{figure}[H]
@@ -328,7 +331,7 @@ Los coeficientes de la logística B (Figura~\ref{fig:coef}) son \textbf{asociaci
 
 \textbf{Por qué Streamlit.} La guía de la Fase 3 (§8.3) exige un despliegue básico y funcional y sugiere, como ejemplo, una aplicación sencilla en Streamlit. Lo elegimos porque coincide con nuestro stack (Python, \texttt{scikit-learn}, \texttt{joblib}), permite en pocos archivos cargar el mismo pipeline entrenado, recoger las 11 entradas del escenario B, aplicar los umbrales del JSON y mostrar advertencias de limitación sin montar un backend aparte. Es adecuado para la \textbf{sustentación oral} (\texttt{streamlit run} en portátil) y para que el comité vea cómo cambia la decisión al mover el umbral. No pretendemos producción bancaria ni exposición pública de la API; es una demo reproducible alineada con la rúbrica de despliegue.
 
-Implementamos la aplicación en \texttt{codigo/app\_streamlit/} que carga el mismo \texttt{pipeline\_logistica\_B.joblib} exportado en entrenamiento, solicita las mismas 11 variables del escenario B y aplica las mismas reglas de preprocesamiento (imputación, escalado y categorías vistas en el ajuste). Los umbrales salen de \texttt{umbrales\_recomendados.json}. La salida es el índice de riesgo relativo y la clase según el corte elegido (0,50, Youden, costo 1$\times$, 2$\times$ o 5$\times$). Los avisos de limitación están en la interfaz.
+Implementamos la aplicación en \texttt{codigo/app\_streamlit/}. La app carga el mismo pipeline guardado (\texttt{pipeline\_logistica\_B.joblib}), solicita las \textbf{mismas 11 variables} del escenario B, aplica imputación, escalado y las \textbf{categorías que el modelo conoció en el entrenamiento} (\texttt{handle\_unknown=infrequent}), y lee los umbrales de \texttt{umbrales\_recomendados.json}. La salida es el índice de riesgo relativo y la clase según el corte (0,50, Youden, costo 1$\times$, 2$\times$ o 5$\times$). La interfaz muestra limitaciones en el panel lateral y, si el usuario elige costo 2$\times$ o 5$\times$, advierte que ese corte marca riesgo a casi todos (casi equivalente a rechazar a todos). Requiere \textbf{scikit-learn 1.9.1} e \textbf{imbalanced-learn 0.14.2} (ver README de la app).
 
 \textbf{Ejecución local:}
 \begin{verbatim}
@@ -356,7 +359,7 @@ streamlit run codigo/app_streamlit/app.py
 
 \section*{Declaración de uso de inteligencia artificial}
 
-Usamos un modelo de lenguaje como apoyo para código, tablas y borradores del informe. El equipo revisó, ajustó y es responsable del contenido. El planteamiento, la base, las variables, el modelo final y la lectura de resultados son nuestros (véase referencia 4).
+Usamos el modelo de lenguaje \textbf{Claude (Sonnet 5)} de Anthropic, accedido vía Cursor, como apoyo para código, tablas y borradores del informe. El equipo revisó, ajustó y es responsable del contenido. El planteamiento, la base, las variables, el modelo final y la lectura de resultados son nuestros.
 
 \section*{Referencias}
 
@@ -364,7 +367,7 @@ Usamos un modelo de lenguaje como apoyo para código, tablas y borradores del in
 \item Attota, D. C., \& Yarmohammadtoosky, S. (2024). \textit{Optimizing Fintech Marketing: A Comparative Study of Logistic Regression and XGBoost}. Kennesaw State University. arXiv:2412.16333.
 \item Calderón Baldeón, L. H. (2021). \textit{BankDefaultAnalysis: Morosidad del Sistema Financiero} [Conjunto de datos]. Kaggle. \url{https://doi.org/10.34740/KAGGLE/DSV/2528417}
 \item Superintendencia de Banca, Seguros y AFP del Perú (SBS). (2021). \textit{Clasificación de riesgo crediticio y estadísticas de morosidad del sistema financiero peruano}. \url{https://www.sbs.gob.pe}
-\item Anthropic. (2026). Claude [Modelo de lenguaje de gran escala]. \url{https://www.anthropic.com/claude}
+\item Anthropic. (2026). Claude (Sonnet 5) [Modelo de lenguaje de gran escala]. \url{https://claude.ai}
 \end{enumerate}
 
 \end{document}

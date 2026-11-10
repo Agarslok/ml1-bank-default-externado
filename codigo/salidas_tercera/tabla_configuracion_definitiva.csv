@@ -1,2 +1,2 @@
-modelo,escenario,variables,balanceo,semilla,particion,k_knn_referencia_cv
-"LogisticRegression(C=1e6, max_iter=5000)",B. Principal (sin atraso ni clasif_sbs),"['edad', 'dias_lab', 'exp_sf', 'nivel_ahorro', 'ingreso', 'linea_sf', 'deuda_sf', 'score', 'vivienda', 'zona', 'nivel_educ']",ninguno,42,80/20 estratificada,151
+modelo,escenario,variables,balanceo,semilla,particion,k_knn_referencia_cv,scikit_learn_version,imbalanced_learn_version
+"LogisticRegression(C=1e6, max_iter=5000)",B. Principal (sin atraso ni clasif_sbs),"['edad', 'dias_lab', 'exp_sf', 'nivel_ahorro', 'ingreso', 'linea_sf', 'deuda_sf', 'score', 'vivienda', 'zona', 'nivel_educ']",ninguno,42,80/20 estratificada,151,1.9.1,0.14.2

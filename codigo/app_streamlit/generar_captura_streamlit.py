@@ -94,18 +94,23 @@ def captura_estatica() -> None:
     t = umb["t_youden_oof"]
     pred = proba >= t
 
-    fig, ax = plt.subplots(figsize=(10, 5.5))
+    fig, ax = plt.subplots(figsize=(11, 6.2))
     ax.axis("off")
-    texto = (
-        "Demo — Priorización de riesgo de mora (Streamlit)\n"
-        "Modelo final: regresión logística · escenario B\n\n"
-        f"Índice de riesgo (modelo): {proba:.3f}\n"
-        f"Umbral Youden OOF (≈ {t:.2f}): {'Mayor riesgo relativo' if pred else 'Bajo riesgo en este corte'}\n\n"
-        "Limitación: score para ordenar clientes, no probabilidad real en Perú.\n"
-        "Ejecutar: streamlit run codigo/app_streamlit/app.py"
+    fig.patch.set_facecolor("#ffffff")
+    ax.add_patch(plt.Rectangle((0, 0), 1, 1, transform=ax.transAxes, facecolor="#f8f9fb", edgecolor="#e0e0e0", lw=1))
+    titulo = "Priorización de riesgo de mora"
+    subt = "U. Externado · ML I · Regresión logística · Escenario B · Pestaña: Ingreso manual"
+    cuerpo = (
+        f"Umbral operativo: Youden OOF (≈ {t:.2f})\n"
+        f"Índice de riesgo (predict_proba): {proba:.3f}\n"
+        f"Decisión en este corte: {'Mayor riesgo relativo' if pred else 'Bajo riesgo relativo'}\n"
+        f"Ejemplo: cliente índice 0 de database.csv (sin duplicados)\n\n"
+        "El score ordena solicitudes; no es probabilidad de mora en el mercado peruano."
     )
-    ax.text(0.05, 0.95, texto, va="top", ha="left", fontsize=11, family="sans-serif", wrap=True)
-    fig.patch.set_facecolor("#fafafa")
+    ax.text(0.04, 0.92, titulo, va="top", ha="left", fontsize=14, fontweight="bold", color="#1f1f1f")
+    ax.text(0.04, 0.84, subt, va="top", ha="left", fontsize=9, color="#555555")
+    ax.text(0.04, 0.72, cuerpo, va="top", ha="left", fontsize=11, color="#222222", family="sans-serif")
+    ax.text(0.04, 0.08, "streamlit run codigo/app_streamlit/app.py", va="bottom", ha="left", fontsize=8, color="#888888")
     OUT.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(OUT, dpi=120, bbox_inches="tight")
     plt.close(fig)
