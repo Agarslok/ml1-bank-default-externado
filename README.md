@@ -15,7 +15,7 @@ Repositorio **privado** para compartir código, informe LaTeX, salidas y demo St
 | **Informe LaTeX final** | [`documentacion/tercera_entrega/main.tex`](documentacion/tercera_entrega/main.tex) + [`entregables_para_informe/`](documentacion/tercera_entrega/entregables_para_informe/) |
 | **Paquete para presentación (Isabella)** | [`documentacion/tercera_entrega/PAQUETE_PARA_ISABELLA.md`](documentacion/tercera_entrega/PAQUETE_PARA_ISABELLA.md) |
 | **Pipeline y umbrales** | `python codigo/tercera/tercera_entrega_lib.py` → `codigo/salidas_tercera/` |
-| **Notebook Fase 3** | [`codigo/tercera/tercera_entrega_modelamiento_final.ipynb`](codigo/tercera/tercera_entrega_modelamiento_final.ipynb) |
+| **Notebook Fase 3 (autocontenido, estilo Colab)** | [`codigo/tercera/tercera_entrega_modelamiento_final.ipynb`](codigo/tercera/tercera_entrega_modelamiento_final.ipynb) — no importa el `.py` |
 | **Notebook con salidas** | [`codigo/tercera/tercera_entrega_modelamiento_final_ejecutado.ipynb`](codigo/tercera/tercera_entrega_modelamiento_final_ejecutado.ipynb) |
 | **App Streamlit** | [`codigo/app_streamlit/`](codigo/app_streamlit/) — ver README allí |
 | **2.ª entrega (referencia)** | [`segunda_entrega/`](segunda_entrega/) |

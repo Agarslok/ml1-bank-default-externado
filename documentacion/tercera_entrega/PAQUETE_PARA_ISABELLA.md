@@ -8,7 +8,7 @@ Juan — listado de archivos actualizados tras correcciones del review.
 |---------|------|
 | Streamlit | `codigo/app_streamlit/app.py` (+ `paths.py`, `README.md`) |
 | Librería Fase 3 | `codigo/tercera/tercera_entrega_lib.py` |
-| Notebook | `codigo/tercera/tercera_entrega_modelamiento_final.ipynb` |
+| Notebook (**autocontenido**, sin depender del `.py`) | `codigo/tercera/tercera_entrega_modelamiento_final.ipynb` |
 | Notebook **con salidas** | `codigo/tercera/tercera_entrega_modelamiento_final_ejecutado.ipynb` (copia en `tercera_entrega/v1/`) |
 | Salidas | `codigo/salidas_tercera/` (incluye `tabla_test_umbrales_solo_lectura.csv`) |
 | Contrato | `documentacion/tercera_entrega/contrato_decisiones.md` |

@@ -1,4 +1,8 @@
-"""Lógica reproducible — entrega final (modelo congelado según contrato_decisiones.md)."""
+"""Lógica reproducible — entrega final (modelo congelado según contrato_decisiones.md).
+
+Usado por: `python tercera_entrega_lib.py` y la app Streamlit.
+El notebook `tercera_entrega_modelamiento_final.ipynb` es autocontenido (no importa este archivo).
+"""
 from __future__ import annotations
 
 import json
