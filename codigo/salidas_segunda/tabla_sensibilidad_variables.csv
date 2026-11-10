@@ -1,0 +1,5 @@
+Modelo,A. Completo (13 variables),B. Principal (sin atraso ni clasif_sbs),"C. Conservador (sin atraso, clasif_sbs ni score)"
+Regresión logística,0.734,0.722,0.709
+LDA,0.73,0.719,0.707
+KNN,0.721,0.714,0.702
+Naive Bayes,0.692,0.685,0.677

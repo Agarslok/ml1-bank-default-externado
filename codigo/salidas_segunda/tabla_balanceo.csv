@@ -1,0 +1,6 @@
+Opción,AUC (CV),Desv. AUC,PR-AUC (CV),Desv. PR-AUC,Recall mora=1 (CV),Recall mora=0 (CV)
+1. Sin balancear,0.698,0.017,0.835,0.013,0.929,0.236
+2. Peso de clases,0.699,0.017,0.836,0.014,0.682,0.612
+3. Submuestreo,0.695,0.019,0.834,0.015,0.671,0.614
+4. Sobremuestreo,0.698,0.016,0.836,0.013,0.679,0.608
+5. SMOTE,0.695,0.02,0.834,0.015,0.665,0.616

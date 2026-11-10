@@ -1,0 +1,6 @@
+opcion,ROC_AUC_CV,PR_AUC_CV
+sin_balancear,0.6983,0.8353
+peso_clases,0.6987,0.8358
+submuestreo,0.6947,0.8336
+sobremuestreo,0.6982,0.8357
+smote,0.6949,0.834

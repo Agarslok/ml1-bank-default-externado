@@ -1,0 +1,87 @@
+8. Entrega final
+La Entrega final corresponde a la Fase 3: consolidaci´on, despliegue y comunicaci´on. El equipo cierra
+el flujo completo, selecciona y justifica el modelo final, lo interpreta a la luz de los objetivos del art´ıculo,
+lo despliega de forma b´asica y comunica los resultados. Se entrega el informe t´ecnico final con el c´odigo
+reproducible y se sustenta oralmente en la tercera sesi´on de retroalimentaci´on.
+8.1. Modelo final y reproducci´on de los objetivos del art´ıculo
+El equipo selecciona el modelo final a partir de la comparaci´on validada, justificando la decisi´on con base
+en las m´etricas, la estabilidad y el equilibrio entre desempe˜no e interpretabilidad. Se contrasta el resultado
+con los objetivos del art´ıculo: en qu´e medida se lograron reproducir en el contexto local y qu´e diferencias
+aparecieron. Se documenta la configuraci´on definitiva y la evaluaci´on sobre el conjunto de prueba.
+6
+8.2. Interpretaci´on de resultados
+Se interpreta el modelo final en t´erminos del problema: variables o factores m´as influyentes, tipos de error y
+sus implicaciones pr´acticas, y alcance de las conclusiones. La interpretaci´on traduce los resultados t´ecnicos
+a un lenguaje comprensible para el contexto de aplicaci´on.
+8.3. Despliegue b´asico
+El equipo implementa un despliegue b´asico y funcional del modelo (por ejemplo, una aplicaci´on simple en
+Streamlit) que reciba entradas, aplique el flujo de preprocesamiento y predicci´on, y devuelva un resultado.
+Se verifica la coherencia entre los datos de entrenamiento y los de uso, y se documenta c´omo ejecutar la
+aplicaci´on.
+8.4. Calidad, limitaciones y proyecci´on
+Se discuten las limitaciones del trabajo (calidad o realismo de los datos, supuestos de la simulaci´on, riesgo
+de sobreajuste, generalizaci´on) y se proponen mejoras o l´ıneas de continuidad, incluyendo su proyecci´on
+hacia t´ecnicas m´as avanzadas que se abordan en Machine Learning II.
+8.5. Sustentaci´on oral
+Cada equipo sustenta el proyecto en una presentaci´on oral, exponiendo el art´ıculo y sus objetivos, la estrategia de datos, el flujo de modelamiento, los resultados y su interpretaci´on, y demostrando el despliegue.
+Todos los integrantes deben estar en capacidad de explicar y defender las decisiones t´ecnicas del proyecto.
+7
+8.6. R´ubrica de la Entrega final
+Criterio Excelente
+(4.0–5.0)
+Bueno (3.0–3.9) Aceptable
+(2.0–2.9)
+Deficiente
+(0.0–1.9)
+Modelo final y
+reproducci´on de
+objetivos
+Modelo final bien
+justificado; los objetivos del art´ıculo se reproducen y
+contrastan con claridad.
+Modelo final justificado; reproducci´on de objetivos
+presente pero parcial.
+Selecci´on poco justificada o reproducci´on confusa de
+los objetivos.
+Modelo final sin
+justificar o sin relaci´on con el art´ıculo.
+Interpretaci´on de
+resultados
+Interpretaci´on clara, conectada con
+el problema y traducida al contexto.
+Interpretaci´on
+correcta pero con
+profundidad limitada.
+Interpretaci´on superficial o desconectada de los resultados.
+Sin interpretaci´on
+de resultados.
+Despliegue b´asico
+Despliegue funcional y reproducible,
+coherente con el
+flujo y bien documentado.
+Despliegue funcional con documentaci´on b´asica.
+Despliegue incompleto o con inconsistencias.
+Sin despliegue o no
+funcional.
+Calidad, limitaciones y proyecci´on
+Discusi´on honesta
+de limitaciones
+(incluida la simulaci´on) y mejoras
+bien fundamentadas.
+Limitaciones y mejoras presentes pero generales.
+Menci´on superficial de limitaciones.
+Sin discusi´on de limitaciones ni proyecci´on.
+Comunicaci´on,
+informe y sustentaci´on
+Informe t´ecnico
+s´olido y sustentaci´on clara; dominio
+integral por todo
+el equipo.
+Informe claro y
+sustentaci´on correcta con algunos
+vac´ıos.
+Informe o sustentaci´on desorganizados o
+dependientes de
+un integrante.
+Informe incompleto; sustentaci´on
+deficiente o ausente.

@@ -1,0 +1,9 @@
+Conjunto,Clientes,% mora
+Base completa (sin duplicados),6074,71.0
+Entrenamiento,4859,71.0
+Prueba,1215,71.0
+CV grupo 1 - validación,972,71.0
+CV grupo 2 - validación,972,71.0
+CV grupo 3 - validación,972,71.0
+CV grupo 4 - validación,972,71.0
+CV grupo 5 - validación,971,71.1

@@ -1,0 +1,17 @@
+,coeficiente,odds ratio
+nivel_educ_UNIVERSITARIA,-0.487,0.615
+exp_sf,-0.309,0.734
+score,-0.293,0.746
+nivel_ahorro,-0.29,0.748
+nivel_educ_TECNICA,-0.238,0.788
+nivel_educ_SIN EDUCACION (poco frecuente),0.136,1.145
+deuda_sf,0.135,1.145
+vivienda_PROPIA,0.131,1.14
+falta_deuda_sf,-0.103,0.902
+linea_sf,-0.1,0.905
+dias_lab,-0.087,0.917
+falta_exp_sf,0.067,1.069
+vivienda_FAMILIAR,-0.065,0.937
+ingreso,-0.052,0.949
+falta_linea_sf,0.041,1.042
+edad,0.003,1.003

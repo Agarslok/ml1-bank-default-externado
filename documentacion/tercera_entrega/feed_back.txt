@@ -1,0 +1,40 @@
+Se evidencia que revisaron de manera seria varios de los problemas identificados en la primera fase y que no se limitaron a ejecutar modelos. Particularmente valiosa es la auditoría que hicieron sobre atraso, clasif_sbs y score, porque entendieron que una variable puede tener gran capacidad predictiva y, aun así, no ser válida si contiene información que no estaría disponible en el momento real de hacer la predicción.
+
+Hay, sin embargo, varios puntos importantes que deben corregir o cerrar antes de la entrega final.
+1. No sigan utilizando el conjunto de prueba para tomar nuevas decisiones.
+Este es el ajuste prioritario. En esta entrega ya utilizaron el 20 % de prueba para comparar modelos, escenarios de variables y desempeño con diferentes cortes. Al mismo tiempo indican que para la entrega final quieren incorporar QDA, Ridge y Lasso.
+Eso sería problemático: si prueban nuevos modelos y vuelven a consultar el mismo test para decidir cuál quedarse, el test deja de ser una evaluación independiente.
+Para la entrega final no necesitan agregar más modelos por agregar modelos. Ya tienen una comparación suficientemente rica. Mi recomendación es que congelen ahora la familia de candidatos y utilicen la evidencia de validación cruzada para justificar la selección. Si continúan experimentando, no deberían utilizar nuevamente este test para escoger alternativas.
+La final debe concentrarse más en cerrar y defender la solución que en seguir buscando un algoritmo marginalmente mejor.
+2. Mantengan muy visible la limitación principal del proyecto: no conocen la temporalidad real del target.
+Ustedes hicieron una buena corrección al dejar de decir que mora necesariamente representa “mora futura” o “mora actual”. La definición operativa está bien formulada, pero sigue siendo una limitación importante.
+Sin fechas y sin diccionario no pueden demostrar completamente que están prediciendo un evento futuro. Técnicamente están aprendiendo a distinguir clientes marcados como morosos de clientes marcados como pagadores al día utilizando información que suponen disponible previamente.
+No escondan esa limitación en la final. Presentarla con transparencia fortalece el trabajo.
+3. Revisen una última vez el uso de score.
+La sensibilidad que hicieron es útil: eliminar score reduce poco el AUC, de aproximadamente 0,722 a 0,709. Eso permite argumentar que el modelo no depende completamente de esa variable.
+Sin embargo, si no consiguen confirmar que el score fue construido antes de la etiqueta mora, mantengan esta salvedad en las conclusiones. Incluso podrían utilizar el escenario sin score como análisis de robustez en la presentación final.
+4. No interpreten 0,72 de AUC como “72 % de aciertos”.
+Su lectura actual es correcta: el modelo tiene una capacidad de discriminación moderada. Mantengan esa interpretación.
+Lo más importante del resultado no es decir “AUC = 0,722”, sino explicar que el modelo ordena clientes mejor que el azar, pero está lejos de separar perfectamente buenos y malos pagadores.
+5. El problema de negocio está realmente en el umbral, no únicamente en el AUC.
+Esta es probablemente la conclusión más interesante que tienen.
+Con umbral 0,5 detectan 94,2 % de los morosos, pero solo reconocen 24,7 % de los buenos pagadores. Con el umbral cercano a 0,71, reconocen muchos más buenos pagadores —63,4 %— pero dejan escapar más morosos.
+Para la final necesitan plantear escenarios de costo. No hace falta inventar un valor monetario “verdadero” si no tienen información; pueden trabajar con escenarios:
+¿qué pasa si dejar pasar un moroso cuesta 2 veces lo que cuesta rechazar erróneamente un buen pagador?
+¿y si cuesta 5 veces?
+¿qué umbral sería razonable en cada caso?
+Eso convertiría el ejercicio técnico en una verdadera decisión.
+6. Revisen la explicación sobre balanceo.
+Su resultado empírico sí permite decir que en estos datos las estrategias probadas prácticamente no modificaron ROC-AUC ni PR-AUC.
+Eviten, sin embargo, generalizar diciendo que “el balanceo solo mueve el corte”. Técnicas de remuestreo o class weights sí pueden modificar la frontera aprendida y el ranking. En su experimento particular el efecto sobre discriminación fue mínimo.
+7. No presenten predict_proba como probabilidad real de mora del mercado peruano.
+Ustedes mismos identificaron correctamente que la muestra tiene 71 % de morosos mientras que la prevalencia reportada para Perú es mucho menor. Por ello, las probabilidades del modelo no deberían venderse como “este cliente tiene 80 % de probabilidad real de incumplir”.
+La lectura más segura es: el score permite ordenar clientes por riesgo relativo dentro de una población con características similares a esta muestra. Si quisieran usar probabilidades operativas reales, necesitarían calibración y una muestra representativa.
+Para la entrega final: presentación ante negocio
+Para la última presentación imaginen que están frente a un comité de riesgo de una entidad financiera. No deberían empezar diciendo “probamos regresión logística, LDA, KNN…”. Empiecen por la decisión:
+“¿Podemos usar la información disponible de un solicitante para priorizar clientes según riesgo sin rechazar innecesariamente demasiados buenos pagadores?”
+La historia de negocio que tienen es bastante buena. Yo esperaría que la presentación final deje claras cuatro cosas:
+qué decisión tomaría el banco con el modelo;
+qué gana frente a la línea base de tratar prácticamente a todos como morosos;
+cuál es el costo de mover el umbral;
+y bajo qué condiciones ustedes sí recomendarían usar la solución.

@@ -1,0 +1,5 @@
+Modelo,AUC con etiquetas mezcladas,Desv. est.
+Regresión logística,0.493,0.017
+KNN,0.493,0.012
+Naive Bayes,0.493,0.024
+LDA,0.493,0.019
