@@ -97,7 +97,7 @@ def main():
         st.error(str(e))
         st.info(
             "Ejecute el notebook de tercera entrega o "
-            "`python codigo/tercera/tercera_entrega_lib.py` para generar el pipeline."
+            "el notebook de entrega final (hasta exportar el pipeline) para generar el pipeline."
         )
         sys.exit(1)
 
@@ -195,7 +195,7 @@ def mostrar_resultado(proba: float, pred: int, t: float, etiqueta: str):
         )
 
     st.info(
-        "Comparar umbrales en el panel izquierdo (0,50, Youden, 2× y 5×) para ver cómo cambia la decisión "
+        "Comparar umbrales en el panel izquierdo (0,50, Youden, 1×, 2× y 5×) para ver cómo cambia la decisión "
         "sin reinterpretar el score como probabilidad del mercado."
     )
 

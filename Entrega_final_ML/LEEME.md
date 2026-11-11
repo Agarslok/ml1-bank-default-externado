@@ -1,45 +1,33 @@
 # Entrega final — Machine Learning I (Fase 3)
 
-Paquete de entrega del proyecto **Riesgo de mora (Perú)**. Mantén esta estructura de carpetas: la aplicación Streamlit (`paths.py`) busca los artefactos en las rutas indicadas abajo.
+Integrantes: Isabella Pensamiento, Juan Angel Triana  
+Proyecto: riesgo de mora (Perú), regresión logística escenario B.
+
+Mantén esta estructura: `paths.py` de Streamlit busca archivos en las rutas de abajo.
 
 ## Estructura
 
 ```
 Entrega_final_ML/
-├── LEEME.md                          ← este archivo
-├── requirements.txt                  ← versiones para app y notebook
-├── Entrega_final_ML_informe.pdf      ← compilar desde main.tex (Overleaf)
-├── Diapositivas_entrega_final.pdf    ← Isabella
+├── LEEME.md
+├── requirements.txt
+├── Entrega_final_ML_informe.pdf
+├── Diapositivas_entrega_final.pdf
 ├── datos/
 │   └── database.csv
 ├── codigo/
 │   ├── tercera_entrega_modelamiento_final_ejecutado.ipynb
-│   ├── tercera_entrega_lib.py
 │   ├── app_streamlit/
 │   │   ├── app.py
-│   │   ├── paths.py
-│   │   └── README.md
+│   │   └── paths.py
 │   └── salidas_tercera/
 │       ├── pipeline_logistica_B.joblib
-│       ├── umbrales_recomendados.json
-│       └── (tablas .csv y figuras .png)
-└── documentacion/
-    ├── contrato_decisiones.md        ← §8 firmado por ambos
-    ├── resumen_para_presentacion.md
-    └── guion_comite_riesgo.md        ← Isabella
+│       └── umbrales_recomendados.json
 ```
 
-Raíz del proyecto = carpeta que contiene `datos/` y `codigo/` (en el zip puede ser `Entrega_final_ML/`).
+Raíz del paquete = carpeta que contiene `datos/` y `codigo/`.
 
-## Versiones de librerías
-
-| Librería | Versión |
-|----------|---------|
-| scikit-learn | **1.9.1** |
-| imbalanced-learn | **0.14.2** |
-| Python | 3.12 (recomendado) |
-
-Instalación:
+## Dependencias
 
 ```powershell
 python -m venv .venv
@@ -47,36 +35,24 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-## Notebook (reproducir o verificar)
+Versiones importantes al cargar el `.joblib`: **scikit-learn 1.9.1**, **imbalanced-learn 0.14.2**.
+
+## Notebook
 
 1. Coloca `database.csv` en `datos/`.
-2. Abre `codigo/tercera_entrega_modelamiento_final_ejecutado.ipynb` (ya incluye salidas).
-3. Para regenerar artefactos (opcional): `python codigo/tercera_entrega_lib.py` desde la raíz del proyecto.
+2. Abre `codigo/tercera_entrega_modelamiento_final_ejecutado.ipynb` (incluye salidas).
+3. El cuaderno es autocontenido: al ejecutarlo de punta a punta vuelve a generar `codigo/salidas_tercera/` (incluido el pipeline de la demo).
 
-## Aplicación Streamlit
+## Streamlit
 
-**Importante:** ejecutar desde `codigo/app_streamlit/`:
+Desde la raíz del paquete:
 
 ```powershell
+pip install -r requirements.txt
 cd codigo\app_streamlit
 streamlit run app.py
 ```
 
-`paths.py` busca, en este orden:
+La app lee `codigo/salidas_tercera/pipeline_logistica_B.joblib`, `umbrales_recomendados.json` y `datos/database.csv`.
 
-- Pipeline: `codigo/salidas_tercera/pipeline_logistica_B.joblib`
-- Umbrales: `codigo/salidas_tercera/umbrales_recomendados.json`
-- Datos de ejemplo: `datos/database.csv`
-
-Si falta el pipeline, ejecuta `python codigo/tercera_entrega_lib.py` desde la raíz.
-
-## Contenido mínimo del zip
-
-- [ ] PDF informe (`Entrega_final_ML_informe.pdf`)
-- [ ] Diapositivas PDF
-- [ ] Este `LEEME.md` y `requirements.txt`
-- [ ] `datos/database.csv`
-- [ ] Notebook ejecutado + `tercera_entrega_lib.py`
-- [ ] `app_streamlit/` + `salidas_tercera/` completas
-- [ ] `contrato_decisiones.md` firmado §8
-- [ ] `resumen_para_presentacion.md`
+Si falta el pipeline, ejecuta el notebook hasta el final o copia de nuevo los archivos de `salidas_tercera/`.

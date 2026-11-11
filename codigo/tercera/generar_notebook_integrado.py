@@ -33,29 +33,28 @@ def code(text: str) -> None:
 md(
     """# Entrega final — Modelo congelado (regresión logística, escenario B)
 
-**Machine Learning I · Universidad Externado de Colombia**
+Machine Learning I · Universidad Externado de Colombia
 
-Cuaderno **autocontenido**: todo el flujo está en estas celdas (estilo Colab). No hace falta importar `tercera_entrega_lib.py`.  
-Las decisiones congeladas están en `documentacion/tercera_entrega/contrato_decisiones.md`.
+Este cuaderno corre solo, sin necesitar otros archivos.
 
 **Qué hace este cuaderno**
-1. Carga `database.csv`, deduplica y parte train/test (80/20, semilla 42).
+1. Carga `database.csv`, deduplica y parte train/prueba (80/20, semilla 42).
 2. Repite la CV de la 2.ª entrega (logística, LDA, KNN, Naive Bayes; escenarios A/B/C).
-3. Calcula probabilidades **out-of-fold (OOF)** en entrenamiento y fija umbrales (0,5, Youden, costos con *r* = 1, 2, 5).
+3. Calcula probabilidades OOF (validación cruzada en entrenamiento) y fija umbrales (0,5, Youden, costos con r = 1, 2, 5).
 4. Entrena el pipeline final escenario B y guarda `pipeline_logistica_B.joblib`.
-5. Reporta **test solo lectura** (sin optimizar umbrales en prueba).
+5. Reporta la prueba en modo solo lectura (sin optimizar umbrales ahí).
 
 **Qué no hace**
 - No usa el conjunto de prueba para elegir modelo ni umbral.
 - No reabre QDA, Ridge ni Lasso.
 
-**Colab:** suba `database.csv` a `/content/` o `/content/datos/`. En local, déjelo en `datos/database.csv` respecto a la raíz del proyecto.
+Colab: suba `database.csv` a `/content/` o `/content/datos/`. En local, déjelo en `datos/database.csv` respecto a la raíz del paquete (`Entrega_final_ML/`).
 
-**Scores:** `predict_proba[:, 1]` es un **índice de riesgo relativo** para ordenar clientes en una muestra similar, no probabilidad de mora en el mercado peruano."""
+Ojo: `predict_proba[:, 1]` aquí solo sirve para ordenar clientes, no es la probabilidad real de mora en Perú."""
 )
 
 code(
-    """# --- 0. Imports ---
+    """# Imports
 from pathlib import Path
 import json
 import shutil
@@ -85,7 +84,7 @@ from sklearn.preprocessing import OneHotEncoder, StandardScaler"""
 )
 
 code(
-    """# --- 0.1 Rutas (local, Colab o Jupyter desde codigo/tercera) ---
+    """# Rutas
 
 def find_project_dirs():
     candidatos_base = [Path.cwd(), *Path.cwd().parents]
@@ -112,7 +111,11 @@ def find_project_dirs():
 
 PROYECTO_DIR, CODIGO_DIR = find_project_dirs()
 OUT_DIR = CODIGO_DIR / "salidas_tercera"
-INFORME_DIR = PROYECTO_DIR / "documentacion" / "tercera_entrega" / "entregables_para_informe"
+_candidatos_informe = [
+    PROYECTO_DIR / "documentacion" / "entregables_para_informe",
+    PROYECTO_DIR / "documentacion" / "tercera_entrega" / "entregables_para_informe",
+]
+INFORME_DIR = next((c for c in _candidatos_informe if c.parent.exists()), _candidatos_informe[0])
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 
 print("Proyecto:", PROYECTO_DIR.resolve())
@@ -121,7 +124,7 @@ print("Informe (figuras):", INFORME_DIR.resolve() if INFORME_DIR.parent.exists()
 )
 
 code(
-    """# --- 1. Constantes (contrato de decisiones) ---
+    """# Constantes
 SEED = 42
 NUM_ALL = [
     "edad", "dias_lab", "exp_sf", "nivel_ahorro", "ingreso", "linea_sf",
@@ -466,7 +469,7 @@ code(
 if ref_test.exists():
     pd.read_csv(ref_test).to_csv(OUT_DIR / "tabla_test_cierre_segunda_entrega.csv", index=False)
 else:
-    print("Aviso: no hay", ref_test, "— omito copia 2.ª entrega")
+    print("No se encontró", ref_test.name, ", se omite la copia de la 2.ª entrega.")
 
 proba_te = pipe_final.predict_proba(X_te[cols_b])[:, 1]
 auc_verify = roc_auc_score(y_te, proba_te)
@@ -505,9 +508,9 @@ display(pd.read_csv(OUT_DIR / "tabla_test_umbrales_solo_lectura.csv").round(3))"
 )
 
 md(
-    """## 8. Copia a `entregables_para_informe` (Overleaf / Isabella)
+    """## 8. Copia de archivos para el informe
 
-Si existe la carpeta del informe, replica los artefactos. En Colab puede omitirse."""
+Si existe la carpeta `documentacion/entregables_para_informe/`, replica tablas y figuras para compilar el PDF. En Colab puede omitirse."""
 )
 
 code(
@@ -536,12 +539,7 @@ if INFORME_DIR.parent.exists():
             shutil.copy2(src, INFORME_DIR / nombre)
     print("Copiados →", INFORME_DIR.resolve())
 else:
-    print("Carpeta informe no encontrada; salidas solo en", OUT_DIR)"""
-)
-
-md(
-    """---
-**Nota:** `tercera_entrega_lib.py` sigue en el repo solo para `python .../tercera_entrega_lib.py` y la app Streamlit. Este notebook no lo necesita para ejecutarse."""
+    print("No hay carpeta para el informe; salidas en", OUT_DIR)"""
 )
 
 nb = {

@@ -139,8 +139,8 @@ Completar al cerrar la reunión Etapa 0 (≈ 45 min).
 
 | Integrante | ¿Aprueba este contrato? | Fecha | Firma / inicial |
 |------------|-------------------------|-------|-----------------|
-| Juan Angel Triana | | | |
-| Isabella Pensamiento | | | |
+| Juan Angel Triana | Sí | 10/11/2026 | JAT |
+| Isabella Pensamiento | Sí | 10/11/2026 | IP |
 
 **Guion 1 minuto (cada uno):**
 

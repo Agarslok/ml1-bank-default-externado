@@ -93,22 +93,20 @@ Noviembre de 2026
 
 \section{Decisión de negocio y alcance}
 
-\textbf{Pregunta del comité.} ¿Podemos usar la información disponible de un solicitante para \textbf{priorizar clientes según riesgo relativo} sin rechazar innecesariamente demasiados buenos pagadores? La respuesta operativa depende del \textbf{umbral}, no solo del AUC.
+\textbf{Pregunta del comité.} ¿Podemos usar la información disponible de un solicitante para priorizar clientes según riesgo relativo sin rechazar de más a buenos pagadores? Para decidir rechazos, el umbral pesa tanto como el AUC.
 
 \textbf{Pregunta técnica (heredada de la 2.ª entrega).} ¿Qué tan bien puede predecirse el riesgo de mora a partir de información financiera y socioeconómica disponible \emph{previamente}?
 
-En esta entrega final \textbf{cerramos} la solución: un único modelo desplegable, reglas de uso honestas y umbrales orientados a costos de error. No agregamos QDA, Ridge ni Lasso para competir otra vez en el mismo conjunto de prueba.
+En esta entrega cerramos con un solo modelo (regresión logística, escenario B), con sus límites claros y cortes elegidos según el costo de equivocarse. No volvemos a competir QDA, Ridge ni Lasso en la misma prueba.
 
 \section{Limitaciones que condicionan cualquier lectura}
-
-Las limitaciones van primero porque delimitan todo lo demás.
 
 \begin{itemize}
 \item \textbf{Temporalidad.} Sin fechas ni diccionario no demostramos que la etiqueta \texttt{mora} sea un evento futuro. Aprendemos a separar clientes ya marcados como morosos o pagadores al día con variables que \emph{suponemos} disponibles antes.
 \item \textbf{Prevalencia.} En la muestra hay $\approx$71\% de mora. No es representativa del Perú (4\% a 11\% según la SBS). Los valores de \texttt{predict\_proba} sirven para \textbf{ordenar} riesgo en una población similar a esta base, no como probabilidad real de mora en el mercado.
 \item \textbf{Identidad y duplicados.} No hay ID de cliente. Eliminamos duplicados exactos de forma conservadora, pero no sabemos si son la misma persona.
 \item \textbf{\texttt{score}.} Lo mantenemos en el escenario principal y probamos el escenario C sin él. Si el score se actualizara después de atrasos, habría fuga residual no verificable sin metadatos.
-\item \textbf{Conjunto de prueba.} En la 2.ª entrega usamos el 20\% de prueba para comparar modelos, escenarios y reportes con distintos cortes. Esa evaluación ya ocurrió. En la Fase 3 \textbf{no} reutilizamos test para elegir modelos ni umbrales nuevos. Solo repetimos cifras de cierre y aplicamos umbrales fijados en entrenamiento (OOF).
+\item \textbf{Conjunto de prueba.} Ya lo usamos en la 2.ª entrega para comparar modelos, escenarios y reportes con distintos cortes. En esta fase no lo usamos para elegir modelo ni cortes. Solo repetimos cifras de cierre y aplicamos umbrales fijados con predicciones fuera del fold (OOF) en entrenamiento.
 \end{itemize}
 
 \noindent\textbf{Sobreajuste.} Usamos logística sin balanceo y modelo \textbf{congelado}; la selección se apoyó en CV y los umbrales solo en OOF. El conjunto de prueba en Fase 3 es \textbf{solo lectura}. AUC en prueba $\approx$0,72 está alineado con CV $\approx$0,70, pero no garantiza generalización fuera de esta base.
@@ -125,7 +123,7 @@ Excluimos \texttt{atraso} y \texttt{clasif\_sbs} del escenario principal porque 
 
 El preprocesamiento va en \texttt{Pipeline} (o \texttt{ImbPipeline} si hubiera balanceo): imputación mediana con indicador, estandarización, one-hot (\texttt{drop='first'}, \texttt{min\_frequency=50}), modelo. En validación cruzada cada fold ajusta transformaciones solo con su entrenamiento.
 
-Probamos cinco estrategias de balanceo solo en entrenamiento (Tabla~\ref{tab:balanceo}). En \textbf{nuestro} experimento, ROC-AUC y PR-AUC en CV casi no cambian. Entrenamos el modelo final \textbf{sin balancear}. En general, remuestreo y pesos pueden alterar la frontera aprendida en otros contextos. Aquí el efecto visible al comparar opciones está sobre todo en recalls y tipos de error, no en discriminación global.
+Probamos cinco estrategias de balanceo solo en entrenamiento (Tabla~\ref{tab:balanceo}). Aquí el balanceo casi no cambió el AUC. Entrenamos el modelo final sin balancear. Lo que cambió fue cuántos morosos y buenos pagadores detecta cada opción.
 
 \begin{table}[H]
 \centering
@@ -170,12 +168,12 @@ Artefacto & \texttt{pipeline\_logistica\_B.joblib} \\
 
 \subsection{Por qué logística y no LDA, KNN o Naive Bayes}
 
-La Tabla~\ref{tab:cv} (2.ª entrega) muestra AUC en CV: logística 0,698 $\pm$ 0,017, LDA 0,699, KNN 0,689 ($k=151$), Naive Bayes 0,657. Las diferencias entre los tres primeros son menores que la desviación entre folds. Naive Bayes queda peor, coherente con correlaciones entre variables financieras. Elegimos logística por \textbf{interpretabilidad} (logit y coeficientes) y alineación con el artículo de referencia (\textit{Credit/GoodBad}, regresión logística).
+La Tabla~\ref{tab:cv} (2.ª entrega) muestra AUC en CV: logística 0,698 $\pm$ 0,017, LDA 0,699, KNN 0,689 ($k=151$), Naive Bayes 0,657. Los tres primeros quedan casi empatados. Naive Bayes queda peor, coherente con correlaciones entre variables financieras. Elegimos la logística porque se puede explicar y porque es el modelo del artículo (\textit{Credit/GoodBad}).
 
 \subsection{Reproducción de objetivos del artículo}
 
 \begin{itemize}
-\item \textbf{Sí reproducimos en espíritu:} clasificación binaria de riesgo, métrica AUC, limpieza básica y logística como modelo interpretable en contexto latinoamericano (Perú).
+\item \textbf{Reproducimos la idea general:} clasificación binaria de riesgo, métrica AUC, limpieza básica y logística como modelo interpretable en contexto latinoamericano (Perú).
 \item \textbf{No reproducimos:} XGBoost, selección masiva de 541 variables, pipeline del paper a otra escala y país.
 \item \textbf{Brecha de desempeño.} AUC en prueba $\approx$0,72 frente a objetivos más altos en el artículo. \textbf{Posibles razones no comprobadas:} muestra con 71\% de mora, escenario B sin variables de pago posteriores, ausencia de diccionario y calidad distinta a la del paper. Discriminación moderada (mejor que azar, lejos de separación perfecta). Un AUC de 0,72 \textbf{no} significa 72\% de aciertos.
 \end{itemize}
@@ -217,7 +215,7 @@ C. Conservador (sin \texttt{score}) & 0,692 \\
 
 \section{Evaluación en prueba (cierre congelado)}
 
-En la 2.ª entrega consultamos el conjunto de prueba varias veces (modelos, escenarios y reportes con distintos cortes). Eso ya está documentado. En la Fase 3 \textbf{no} volvemos a usar test para \textbf{elegir} modelo ni umbral. Aquí repetimos las cifras de \textbf{cierre congelado} y verificamos que reentrenar el mismo pipeline reproduce AUC $\approx$0,722 (cuaderno reproducible de Fase 3 entregado con el proyecto).
+En la 2.ª entrega consultamos el conjunto de prueba varias veces (modelos, escenarios y reportes con distintos cortes). Eso ya está documentado. En la Fase 3 no volvemos a usar la prueba para elegir modelo ni umbral. Aquí repetimos las cifras de cierre congelado y verificamos que reentrenar el mismo pipeline reproduce AUC $\approx$0,722 (cuaderno de Fase 3 entregado con el proyecto).
 
 \begin{table}[H]
 \centering
@@ -256,9 +254,9 @@ Log.\ (Youden OOF) & 0,722 & 0,840 & 0,689 & 0,822 & 0,634 & 268 \\
 
 \section{Umbrales: Youden y escenarios de costo (OOF)}
 
-La etiqueta binaria depende del umbral $t$ sobre el score del modelo. El índice de Youden $J = \mathrm{TPR} - \mathrm{FPR}$ se maximizó con probabilidades \emph{out-of-fold} en entrenamiento ($t \approx 0{,}71$).
+La etiqueta binaria depende del umbral $t$ sobre el score del modelo. El índice de Youden $J = \mathrm{TPR} - \mathrm{FPR}$ se maximizó con probabilidades OOF en entrenamiento (cada cliente recibe el score de un fold donde no entró al ajuste; $t \approx 0{,}71$).
 
-Para la entrega final añadimos costos simbólicos $C = r \cdot FN + FP$ con $r =$ costo(FN)/costo(FP). Minimizamos $C$ en OOF (4{,}859 clientes de entrenamiento), sin mirar test. Incluimos $r \in \{1, 2, 5\}$ y la \textbf{línea base} que predice siempre mora (FN$=0$, FP$=$ buenos pagadores en OOF $=1{,}409$).
+Para la entrega final añadimos costos simbólicos $C = r \cdot FN + FP$ con $r =$ costo(FN)/costo(FP). Minimizamos $C$ en OOF (4{,}859 clientes de entrenamiento), sin mirar la prueba. Incluimos $r \in \{1, 2, 5\}$ y la línea base que predice siempre mora (FN$=0$, FP$=$ buenos pagadores en OOF $=1{,}409$).
 
 \begin{table}[H]
 \centering
@@ -279,7 +277,7 @@ Costo $r=5$ (mín. en OOF) & 0,14 & 0 & 1404 & 1404 & 1404 & 1404 & 0,004 \\
 \end{tabular}
 \end{table}
 
-La línea base fija $C = 1409$ para cualquier $r$ porque FN$=0$. Con $r=1$ el costo baja a 1302 (reducción $\approx$7,6\% frente a 1409): ahí el corte binario \textbf{sí} mejora rechazar a todos. Con $r=2$ el mínimo (1392) apenas baja la línea base; con $r=5$ el óptimo (1404) casi coincide con 1409. \textbf{Youden} ($C$ de 1634 / 2724 / 5994 según $r$) es \textbf{peor en costo} que la línea base en los tres pesos: sirve para \textbf{repartir} FN y FP (más especificidad, más FN), no para ahorrar $C$. \textbf{Mensaje para el comité:} si un moroso cuesta el doble o más que un falso rechazo, el modelo binario óptimo no aporta frente a la línea base; con errores de costo parecido ($r=1$) sí, y el \textbf{score} siempre sirve para \textbf{ordenar} la cartera.
+La línea base fija $C = 1409$ para cualquier $r$ porque FN$=0$. Con $r=1$ el costo baja a 1302 (reducción $\approx$7,6\% frente a 1409): en ese escenario el corte binario sí mejora rechazar a todos. Con $r=2$ el mínimo (1392) apenas baja la línea base; con $r=5$ el óptimo (1404) casi coincide con 1409. Youden sube el costo simbólico (1634 / 2724 / 5994 según $r$) pero reconoce más buenos pagadores a cambio de más morosos etiquetados como riesgo bajo. Para el comité: si un moroso cuesta el doble o más que un falso rechazo, el corte que minimiza $C$ en OOF casi no gana a predecir mora para todos; cuando ambos errores pesan parecido ($r=1$) sí hay margen, y el score sigue siendo útil para ordenar la cartera.
 
 \begin{figure}[H]
 \centering
@@ -292,7 +290,7 @@ En \textbf{prueba (solo lectura)} aplicamos los umbrales ya elegidos en OOF. La 
 
 \begin{table}[H]
 \centering
-\caption{Prueba (1{,}215 clientes): umbrales fijados en OOF — solo lectura.}
+\caption{Prueba (1{,}215 clientes): umbrales fijados en OOF, solo lectura.}
 \label{tab:test_umbrales}
 \footnotesize
 \begin{tabular}{@{}lrrrrrr@{}}
@@ -308,7 +306,7 @@ Costo $r=5$ & 0,14 & 0 & 352 & 1,000 & 0,000 \\
 \end{tabular}
 \end{table}
 
-\noindent Con $r=2$ o $r=5$ en test casi todos quedan como mora (recall mora=0 $\approx$ 0). Youden y $r=1$ muestran \textbf{repartos distintos} de FN/FP; solo $r=1$ fue competitivo en \textbf{costo} frente a la línea base en OOF.
+\noindent Con $r=2$ o $r=5$ en la prueba casi todos quedan como mora (recall mora=0 $\approx$ 0). Youden y $r=1$ reparten distinto los FN y FP; solo $r=1$ fue competitivo en costo frente a la línea base en OOF.
 
 \section{Robustez: escenario C y sensibilidad en prueba (2.ª entrega)}
 
@@ -333,19 +331,17 @@ Quitar \texttt{score} reduce poco el AUC. Mantenemos B pero documentamos la salv
 
 \section{Interpretación del modelo final}
 
-Los coeficientes de la logística B (Figura~\ref{fig:coef}) son \textbf{asociaciones} en esta muestra, lineales en el \textbf{logit}. No son causas. Para un comité de riesgo, una lectura operativa es:
-
-Variables numéricas van \textbf{escaladas} en el pipeline: el OR es por \textbf{cada desviación estándar} en entrenamiento (asociaciones en esta muestra, no causalidad):
+Los coeficientes de la logística B (Figura~\ref{fig:coef}) se leen junto con el umbral y el costo de errores. Las variables numéricas se escalan, así que cada OR es por cada desviación estándar. Son asociaciones en esta muestra, no causas.
 
 \begin{itemize}
-\item \texttt{score}: OR $\approx$ 0,75 por desv.\ est.\ $\rightarrow$ a mayor score, menor odds de mora en el logit.
-\item \texttt{nivel\_ahorro}: OR $\approx$ 0,75; \texttt{exp\_sf} (experiencia en el sistema financiero): OR $\approx$ 0,73.
-\item \texttt{deuda\_sf}: OR $\approx$ 1,15 $\rightarrow$ más deuda asociada a mayor odds de mora, \textbf{ceteris paribus}.
+\item \texttt{score}: OR $\approx$ 0,75; a mayor score, menor probabilidad modelada de mora.
+\item \texttt{nivel\_ahorro}: OR $\approx$ 0,75; \texttt{exp\_sf}: OR $\approx$ 0,73.
+\item \texttt{deuda\_sf}: OR $\approx$ 1,15; más deuda va con mayor OR de mora en el ajuste.
 \end{itemize}
 
-Entre categorías (referencia implícita del one-hot): \textbf{zona Loreto} OR $\approx$ 2,5; \textbf{zona Ucayali} OR $\approx$ 2,4; \textbf{nivel universitario} OR $\approx$ 0,62 frente a la referencia de educación en el ajuste. Son patrones de esta base Kaggle, no reglas para todo el Perú.
+En categorías (one-hot, referencia implícita): zona Loreto OR $\approx$ 2,5; Ucayali $\approx$ 2,4; nivel universitario $\approx$ 0,62 frente a la referencia de educación. Son patrones de esta base Kaggle, no reglas para todo el Perú.
 
-El modelo \textbf{ordena} solicitudes para revisión manual; el comité fija umbral, costos y excepciones.
+El modelo ordena solicitudes para revisión manual; el comité fija umbral, costos y excepciones.
 
 \begin{figure}[H]
 \centering
@@ -356,11 +352,9 @@ El modelo \textbf{ordena} solicitudes para revisión manual; el comité fija umb
 
 \section{Despliegue básico (Streamlit)}
 
-\textbf{Por qué Streamlit.} La guía de la Fase 3 (§8.3) exige un despliegue básico y funcional y sugiere, como ejemplo, una aplicación sencilla en Streamlit. Lo elegimos porque coincide con nuestro stack (Python, \texttt{scikit-learn}, \texttt{joblib}), permite cargar el pipeline serializado, recoger las 11 entradas del escenario B, aplicar umbrales exportados y mostrar advertencias sin montar un servidor aparte. Es adecuado para la \textbf{sustentación oral} en portátil y para que el comité vea cómo cambia la decisión al mover el umbral. No pretendemos producción bancaria ni exposición pública en internet; es una demo \textbf{local} alineada con la rúbrica de despliegue.
+La guía de la Fase 3 (§8.3) pide un despliegue básico. Usamos Streamlit con el mismo Python y \texttt{joblib} del proyecto. Es una demo local para la sustentación, no un sistema en producción.
 
-La demo local sigue la misma estructura que el paquete de entrega del curso (detalle en \texttt{LEEME.md}): raíz del proyecto con \texttt{datos/database.csv}; bajo \texttt{codigo/}, la carpeta \texttt{salidas\_tercera/} con \texttt{pipeline\_logistica\_B.joblib} y \texttt{umbrales\_recomendados.json}; y \texttt{codigo/app\_streamlit/} con \texttt{app.py} y \texttt{paths.py}, que resuelven esas rutas automáticamente. La app pide las \textbf{11 variables} del escenario B, aplica el mismo preprocesamiento y muestra el score y la clase (0,50, Youden, costo 1$\times$/2$\times$/5$\times$). Si el usuario elige costo 2$\times$ o 5$\times$, aparece aviso de que el corte marca riesgo a casi todos. Versiones usadas al serializar: \textbf{scikit-learn 1.9.1}, \textbf{imbalanced-learn 0.14.2}.
-
-\textbf{Ejecución:} desde \texttt{codigo/app\_streamlit/}, con dependencias instaladas (\texttt{requirements.txt} en la raíz del paquete), ejecutar \texttt{streamlit run app.py}.
+En el paquete van \texttt{datos/database.csv}, \texttt{codigo/salidas\_tercera/} (\texttt{pipeline\_logistica\_B.joblib}, \texttt{umbrales\_recomendados.json}) y \texttt{codigo/app\_streamlit/}. Instrucciones en \texttt{LEEME.md}. Serializado con scikit-learn 1.9.1 e imbalanced-learn 0.14.2.
 
 \begin{figure}[H]
 \centering
@@ -372,10 +366,9 @@ La demo local sigue la misma estructura que el paquete de entrega del curso (det
 \section{Conclusiones y condiciones de uso}
 
 \begin{itemize}
-\item Con información previamente disponible y escenario B, la logística \textbf{ordena} mejor que la línea base (AUC $\approx$0,72, discriminación moderada).
-\item El problema de negocio relevante es el \textbf{umbral}. Con $r=5$ (y en la práctica $r=2$) el corte óptimo en OOF casi no mejora rechazar a todos en \textbf{costo}. Solo con $r=1$ el costo simbólico baja de forma clara ($\approx$7,6\%). \textbf{Youden} reparte FN/FP pero no ahorra $C$ frente a la línea base. El score sigue valiendo para \textbf{priorizar} por riesgo relativo.
-\item \textbf{Recomendamos} usar el score del modelo para priorización interna en muestras similares si el comité acepta las limitaciones de temporalidad, prevalencia y \texttt{score}.
-\item \textbf{No recomendamos} comunicar \texttt{predict\_proba} como probabilidad poblacional de mora en Perú ni tomar nuevas decisiones de modelo con el mismo test.
+\item Con información previamente disponible y escenario B, la logística separa mejor que la línea base (AUC $\approx$0,72, discriminación moderada).
+\item El umbral condiciona la decisión práctica. Con $r=5$ (y en $r=2$) el corte óptimo en OOF casi no mejora rechazar a todos en costo; con $r=1$ el costo simbólico baja $\approx$7,6\%. Youden cambia el balance de FN y FP, pero no baja $C$ frente a la línea base. El score sirve para priorizar por riesgo relativo.
+\item Usamos el score para priorizar en muestras similares solo si el comité acepta las limitaciones (temporalidad, prevalencia, \texttt{score}) y no interpreta \texttt{predict\_proba} como probabilidad de mora en Perú ni reutiliza la misma prueba para nuevas decisiones de modelo.
 \end{itemize}
 
 \textbf{Proyección (Machine Learning II).} Calibración de probabilidades, validación temporal con fechas, cost-sensitive learning con costos reales del banco y modelos más flexibles con control de sobreajuste.

@@ -97,7 +97,7 @@ def main():
         st.error(str(e))
         st.info(
             "Ejecute el notebook de tercera entrega o "
-            "`python codigo/tercera/tercera_entrega_lib.py` para generar el pipeline."
+            "el notebook de entrega final (hasta exportar el pipeline) para generar el pipeline."
         )
         sys.exit(1)
 

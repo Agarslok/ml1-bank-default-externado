@@ -1,0 +1,14 @@
+{
+  "t_convencion": 0.5,
+  "t_youden_oof": 0.71,
+  "t_costo_fn_1x_fp_oof": 0.57,
+  "t_costo_fn_2x_fp_oof": 0.27,
+  "t_costo_fn_5x_fp_oof": 0.135,
+  "j_youden_oof": 0.298,
+  "costo_simbolico_oof_ratio1": 1302.0,
+  "costo_simbolico_oof_ratio2": 1392.0,
+  "costo_simbolico_oof_ratio5": 1404.0,
+  "linea_base_FP_oof": 1409,
+  "linea_base_costo_r1": 1409,
+  "nota": "Umbrales elegidos solo con OOF en entrenamiento. No optimizar en test."
+}
