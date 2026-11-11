@@ -1,0 +1,4 @@
+Escenario,AUC CV (logística)
+A. Completo (13 variables),0.715
+B. Principal (sin atraso ni clasif_sbs),0.698
+"C. Conservador (sin atraso, clasif_sbs ni score)",0.692

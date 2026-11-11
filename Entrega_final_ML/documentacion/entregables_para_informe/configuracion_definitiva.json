@@ -1,0 +1,23 @@
+{
+  "modelo": "LogisticRegression(C=1e6, max_iter=5000)",
+  "escenario": "B. Principal (sin atraso ni clasif_sbs)",
+  "variables": [
+    "edad",
+    "dias_lab",
+    "exp_sf",
+    "nivel_ahorro",
+    "ingreso",
+    "linea_sf",
+    "deuda_sf",
+    "score",
+    "vivienda",
+    "zona",
+    "nivel_educ"
+  ],
+  "balanceo": "ninguno",
+  "semilla": 42,
+  "particion": "80/20 estratificada",
+  "k_knn_referencia_cv": 151,
+  "scikit_learn_version": "1.9.1",
+  "imbalanced_learn_version": "0.14.2"
+}

@@ -11,32 +11,31 @@
 - AUC CV logística: **0,698** | AUC prueba (cierre 2.ª entrega): **0,722** (discriminación moderada, no 72 % aciertos).
 - Prevalencia en la muestra **71 %** → el score **ordena**, no es probabilidad real en Perú.
 
-## Tabla de costos OOF (mensaje para slide)
+## Tabla 6 — costos OOF (para slide; igual que el informe)
 
-| Criterio | t | C (r=2) | ¿Mejor que línea base (1409)? |
-|----------|---|---------|-------------------------------|
-| Línea base siempre mora | — | 1409 | — |
-| Costo r=1 (mín. OOF) | 0,57 | **1302** (C con r=1) | Sí (1302 vs 1409) |
-| Youden | 0,71 | 2724 | No (pero equilibra recalls) |
-| Costo r=2 | 0,27 | **1392** | Apenas sí |
-| Costo r=5 | 0,14 | **1404** | Casi igual → como línea base |
+$C = r \cdot FN + FP$. Línea base: predecir siempre mora (FN = 0, FP = 1 409 buenos pagadores en OOF).
 
-**Conclusión oral:** con FN muy caro el corte bajo marca a casi todos y el binario parece la línea base. El valor está en **ordenar por score** y en umbrales intermedios (r=1, Youden).
+| Criterio | $t$ | FN | FP | $C$ (r=1) | $C$ (r=2) | $C$ (r=5) | Esp. |
+|----------|-----|----|----|-----------|-----------|-----------|------|
+| Línea base | — | 0 | 1409 | 1409 | 1409 | 1409 | 0,00 |
+| Convención 0,50 | 0,50 | 244 | 1076 | 1320 | 1564 | 2296 | 0,24 |
+| Costo **r=1** (mín. OOF) | 0,57 | 381 | 921 | **1302** | 1683 | 2826 | 0,35 |
+| Youden OOF | 0,71 | 1090 | 544 | 1634 | 2724 | 5994 | 0,61 |
+| Costo **r=2** (mín. OOF) | 0,27 | 13 | 1366 | 1379 | **1392** | 1431 | 0,03 |
+| Costo **r=5** (mín. OOF) | 0,14 | 0 | 1404 | 1404 | 1404 | **1404** | 0,00 |
+
+**Conclusión oral (comité):** El modelo solo **mejora** frente a rechazar a todos cuando los dos errores cuestan **parecido** (con $r=1$ el costo baja de 1409 a 1302, una reducción de **~7,6 %**). Si un moroso cuesta el **doble o más** que un falso rechazo ($r=2$, $r=5$), el corte óptimo en OOF **no aporta** frente a la línea base en costo simbólico.
+
+**Youden:** En costo ($C$) Youden es **peor** que la línea base para $r=1$, $r=2$ y $r=5$. Sirve para **repartir** FN y FP (más buenos pagadores reconocidos, más morosos pasan), no para **ahorrar** costo frente a “rechazar a todos”. El valor estable del proyecto sigue siendo **ordenar por score** y discutir umbrales con el comité.
 
 ## Umbrales en prueba (solo lectura)
 
-Ver `tabla_test_umbrales_solo_lectura.csv`. No usaron test para elegir umbrales en Fase 3.
+No se optimizó test en Fase 3. Detalle en `tabla_test_umbrales_solo_lectura.csv` dentro de `codigo/salidas_tercera/`.
 
 ## Limitaciones (siempre visibles)
 
 Temporalidad no demostrada | 71 % mora | score sin diccionario | test ya usado en 2.ª entrega.
 
-## Streamlit
+## Streamlit (demo local)
 
-**Por qué (1 frase oral):** la guía §8.3 pide despliegue básico; Streamlit encaja con Python/sklearn, muestra el mismo pipeline en vivo y permite cambiar el umbral en la sustentación sin otro servidor.
-
-Demo: mismo `pipeline_logistica_B.joblib`, 11 variables, umbrales en JSON. Código: `codigo/app_streamlit/`.
-
-## Archivos en esta carpeta
-
-Figuras ROC, PR, coeficientes, costo vs umbral, captura app, CSVs de umbrales y CV.
+Carpeta `codigo/app_streamlit/`. Desde ahí: `streamlit run app.py` (ver `LEEME.md` del paquete de entrega).

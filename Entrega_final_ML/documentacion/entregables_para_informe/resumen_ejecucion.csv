@@ -1,0 +1,5 @@
+clave,valor
+n_train,4859.0
+n_test,1215.0
+pct_mora,71.0
+auc_cv_logistica,0.698

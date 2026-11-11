@@ -195,7 +195,7 @@ def mostrar_resultado(proba: float, pred: int, t: float, etiqueta: str):
         )
 
     st.info(
-        "Comparar umbrales en el panel izquierdo (0,50, Youden, 2× y 5×) para ver cómo cambia la decisión "
+        "Comparar umbrales en el panel izquierdo (0,50, Youden, 1×, 2× y 5×) para ver cómo cambia la decisión "
         "sin reinterpretar el score como probabilidad del mercado."
     )
 

@@ -1,0 +1,9 @@
+Overleaf — solo sube a la raíz del proyecto:
+  - main.tex (desde documentacion/tercera_entrega/)
+  - Esta carpeta completa (entregables_para_informe/)
+  - logo_uexternado.png (opcional, junto a main.tex)
+
+Figuras necesarias en esta carpeta:
+  fig_roc.png, fig_pr.png, fig_coeficientes.png, fig_costo_vs_umbral.png, captura_streamlit.png
+
+Captura Streamlit (Figura 4): ideal incluir título de la app o selector de umbral + resultado tras "Calcular riesgo" (Youden).

@@ -2,6 +2,18 @@
 
 Aplicación mínima del **modelo final** (regresión logística, escenario B). Carga el mismo `pipeline` exportado en el notebook de tercera entrega.
 
+## Estructura de carpetas (paquete `Entrega_final_ML/`)
+
+```
+datos/database.csv
+codigo/salidas_tercera/pipeline_logistica_B.joblib
+codigo/salidas_tercera/umbrales_recomendados.json
+codigo/app_streamlit/app.py   ← ejecutar desde aquí
+codigo/app_streamlit/paths.py
+```
+
+`paths.py` resuelve esas rutas respecto a la **raíz del proyecto** (carpeta padre de `codigo/`).
+
 ## Requisitos previos
 
 Generar el pipeline (si aún no existe):

@@ -1,0 +1,2 @@
+AUC_reentrenado_mismo_train_test,AUC_informe_segunda_entrega,uso
+0.722,0.722,Verificación. No usar test para elegir modelo ni umbral.

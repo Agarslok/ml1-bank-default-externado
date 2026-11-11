@@ -9,7 +9,10 @@ Juan — listado para compartir (repartición Fase 3). Todo está en el repo pri
 - [x] `documentacion/tercera_entrega/entregables_para_informe/resumen_para_presentacion.md`
 - [x] `codigo/tercera/tercera_entrega_modelamiento_final_ejecutado.ipynb` (con salidas)
 - [x] `codigo/salidas_tercera/` completa → `tabla_test_umbrales_solo_lectura.csv`
-- [ ] PDF nuevo desde Overleaf (`main.tex` actualizado) — pendiente compilar
+- [x] `Entrega_final_ML/` (LEEME.md, requirements.txt, árbol acordado)
+- [x] `resumen_para_presentacion.md` alineado con Tabla 6 + conclusión 7,6 %
+- [ ] PDF v3 → copiar a `Entrega_final_ML/Entrega_final_ML_informe.pdf` (Overleaf)
+- [ ] Contrato §8 firmado por ambos
 
 ## Código y datos
 

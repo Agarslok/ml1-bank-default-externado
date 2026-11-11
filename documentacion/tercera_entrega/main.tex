@@ -1,7 +1,9 @@
 % Entrega final (Fase 3) — Overleaf
-% Subir a la raíz del proyecto Overleaf, junto con este main.tex:
+% Subir a la MISMA raíz del proyecto Overleaf:
+%   main.tex (este archivo)
+%   Carpeta entregables_para_informe/ (figuras PNG, captura_streamlit.png)
 %   logo_uexternado.png (opcional)
-%   Carpeta entregables_para_informe/ con figuras (ver lista al inicio del cuerpo)
+% No hace falta subir codigo/ para compilar el PDF.
 % Fuente base: segunda_entrega/Ml_segunda_entrega_final.pdf ≡ documentacion/segunda_entrega/main.tex
 
 \documentclass[11pt]{article}
@@ -109,6 +111,8 @@ Las limitaciones van primero porque delimitan todo lo demás.
 \item \textbf{Conjunto de prueba.} En la 2.ª entrega usamos el 20\% de prueba para comparar modelos, escenarios y reportes con distintos cortes. Esa evaluación ya ocurrió. En la Fase 3 \textbf{no} reutilizamos test para elegir modelos ni umbrales nuevos. Solo repetimos cifras de cierre y aplicamos umbrales fijados en entrenamiento (OOF).
 \end{itemize}
 
+\noindent\textbf{Sobreajuste.} Usamos logística sin balanceo y modelo \textbf{congelado}; la selección se apoyó en CV y los umbrales solo en OOF. El conjunto de prueba en Fase 3 es \textbf{solo lectura}. AUC en prueba $\approx$0,72 está alineado con CV $\approx$0,70, pero no garantiza generalización fuera de esta base.
+
 \section{Datos, fuga de información y escenario B}
 
 Usamos \textit{BankDefaultAnalysis} (Kaggle, Calderón Baldeón, 2021): 8{,}399 registros, 13 predictores más \texttt{mora}. Tras quitar 2{,}325 filas duplicadas quedan 6{,}074 clientes. Partición 80/20 estratificada, semilla 42 (4{,}859 entrenamiento, 1{,}215 prueba).
@@ -147,7 +151,7 @@ SMOTE & 0,695 & 0,834 & 0,665 & 0,616 \\
 
 \begin{table}[H]
 \centering
-\caption{Modelo final congelado (\texttt{contrato\_decisiones.md}).}
+\caption{Modelo final congelado (decisiones documentadas del equipo en Fase 3).}
 \label{tab:config}
 \small
 \begin{tabular}{@{}ll@{}}
@@ -180,7 +184,7 @@ La Tabla~\ref{tab:cv} (2.ª entrega) muestra AUC en CV: logística 0,698 $\pm$ 0
 
 \begin{table}[H]
 \centering
-\caption{AUC en validación cruzada (5 folds), escenario B. Fuente: 2.ª entrega / \texttt{tabla\_cv\_modelo\_final.csv}.}
+\caption{AUC en validación cruzada (5 folds), escenario B. Fuente: 2.ª entrega (mismas partición y semilla).}
 \label{tab:cv}
 \small
 \begin{tabular}{@{}lcccc@{}}
@@ -213,7 +217,7 @@ C. Conservador (sin \texttt{score}) & 0,692 \\
 
 \section{Evaluación en prueba (cierre congelado)}
 
-En la 2.ª entrega consultamos el conjunto de prueba varias veces (modelos, escenarios y reportes con distintos cortes). Eso ya está documentado. En la Fase 3 \textbf{no} volvemos a usar test para \textbf{elegir} modelo ni umbral. Aquí repetimos las cifras de \textbf{cierre congelado} y verificamos que reentrenar el mismo pipeline reproduce AUC $\approx$0,722 (notebook \texttt{tercera\_entrega}).
+En la 2.ª entrega consultamos el conjunto de prueba varias veces (modelos, escenarios y reportes con distintos cortes). Eso ya está documentado. En la Fase 3 \textbf{no} volvemos a usar test para \textbf{elegir} modelo ni umbral. Aquí repetimos las cifras de \textbf{cierre congelado} y verificamos que reentrenar el mismo pipeline reproduce AUC $\approx$0,722 (cuaderno reproducible de Fase 3 entregado con el proyecto).
 
 \begin{table}[H]
 \centering
@@ -275,7 +279,7 @@ Costo $r=5$ (mín. en OOF) & 0,14 & 0 & 1404 & 1404 & 1404 & 1404 & 0,004 \\
 \end{tabular}
 \end{table}
 
-La línea base fija $C = 1409$ para cualquier $r$ porque FN$=0$. Con $r=1$ el modelo reduce el costo total a 1302 frente a 1409: ahí el corte binario \textbf{sí} aporta frente a rechazar a todos. Con $r=2$ el costo mínimo (1392) queda apenas por debajo de la línea base; con $r=5$ el óptimo (1404) casi coincide con 1409 y la especificidad cae a 0,004 (casi todos marcados como mora). \textbf{Mensaje para el comité:} cuando el falso negativo se pesa mucho más que el falso positivo ($r=2$ o $r=5$), el mejor umbral en OOF empuja a una regla casi igual a la línea base. El modelo \textbf{solo aporta de forma clara} si los dos errores tienen costos del mismo orden ($r=1$) o si el comité usa el \textbf{score para ordenar} y umbrales intermedios (Youden, $r=1$), no solo el extremo $r=5$.
+La línea base fija $C = 1409$ para cualquier $r$ porque FN$=0$. Con $r=1$ el costo baja a 1302 (reducción $\approx$7,6\% frente a 1409): ahí el corte binario \textbf{sí} mejora rechazar a todos. Con $r=2$ el mínimo (1392) apenas baja la línea base; con $r=5$ el óptimo (1404) casi coincide con 1409. \textbf{Youden} ($C$ de 1634 / 2724 / 5994 según $r$) es \textbf{peor en costo} que la línea base en los tres pesos: sirve para \textbf{repartir} FN y FP (más especificidad, más FN), no para ahorrar $C$. \textbf{Mensaje para el comité:} si un moroso cuesta el doble o más que un falso rechazo, el modelo binario óptimo no aporta frente a la línea base; con errores de costo parecido ($r=1$) sí, y el \textbf{score} siempre sirve para \textbf{ordenar} la cartera.
 
 \begin{figure}[H]
 \centering
@@ -284,7 +288,27 @@ La línea base fija $C = 1409$ para cualquier $r$ porque FN$=0$. Con $r=1$ el mo
 \label{fig:costo}
 \end{figure}
 
-En prueba (solo lectura), con umbral 0,5 la logística deja 50 falsos negativos y reconoce 24,7\% de buenos pagadores. Con Youden OOF sube el reconocimiento de mora$=0$ al 63,4\%, con 268 FN.
+En \textbf{prueba (solo lectura)} aplicamos los umbrales ya elegidos en OOF. La Tabla~\ref{tab:test_umbrales} resume FN, FP y recalls; no se buscó ningún corte óptimo en estos 1{,}215 clientes.
+
+\begin{table}[H]
+\centering
+\caption{Prueba (1{,}215 clientes): umbrales fijados en OOF — solo lectura.}
+\label{tab:test_umbrales}
+\footnotesize
+\begin{tabular}{@{}lrrrrrr@{}}
+\toprule
+\textbf{Criterio (OOF)} & \textbf{$t$} & \textbf{FN} & \textbf{FP} & \textbf{Rec. mora=1} & \textbf{Rec. mora=0} \\
+\midrule
+Convención & 0,50 & 50 & 265 & 0,942 & 0,247 \\
+Costo $r=1$ & 0,57 & 82 & 229 & 0,905 & 0,349 \\
+Youden & 0,71 & 268 & 129 & 0,689 & 0,634 \\
+Costo $r=2$ & 0,27 & 4 & 334 & 0,995 & 0,051 \\
+Costo $r=5$ & 0,14 & 0 & 352 & 1,000 & 0,000 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent Con $r=2$ o $r=5$ en test casi todos quedan como mora (recall mora=0 $\approx$ 0). Youden y $r=1$ muestran \textbf{repartos distintos} de FN/FP; solo $r=1$ fue competitivo en \textbf{costo} frente a la línea base en OOF.
 
 \section{Robustez: escenario C y sensibilidad en prueba (2.ª entrega)}
 
@@ -311,14 +335,17 @@ Quitar \texttt{score} reduce poco el AUC. Mantenemos B pero documentamos la salv
 
 Los coeficientes de la logística B (Figura~\ref{fig:coef}) son \textbf{asociaciones} en esta muestra, lineales en el \textbf{logit}. No son causas. Para un comité de riesgo, una lectura operativa es:
 
+Variables numéricas van \textbf{escaladas} en el pipeline: el OR es por \textbf{cada desviación estándar} en entrenamiento (asociaciones en esta muestra, no causalidad):
+
 \begin{itemize}
-\item \textbf{Score crediticio (\texttt{score}):} coeficiente negativo en logit $\Rightarrow$ un score más alto se asocia con \textbf{menor} índice de riesgo relativo del modelo. En lenguaje de comité: mejor historial resumido en \texttt{score} $\rightarrow$ prioridad de revisión más baja, \textbf{ceteris paribus}.
-\item \textbf{Ahorro y estabilidad:} mayor \texttt{nivel\_ahorro}, más \texttt{exp\_sf} o más \texttt{dias\_lab} acompañan menor riesgo relativo; ayudan a ordenar cola de solicitudes, no sustituyen política de cupos.
-\item \textbf{Carga de deuda:} mayor \texttt{deuda\_sf} $\rightarrow$ mayor riesgo relativo (más exposición en el sistema). Útil para alertar perfiles ya muy apalancados antes del desembolso.
-\item \textbf{Perfil socioeconómico:} categorías de \texttt{vivienda}, \texttt{zona} y \texttt{nivel\_educ} se codifican respecto a referencias aprendidas en entrenamiento; un nivel educativo distinto al de referencia puede subir o bajar el logit en esta muestra.
-\item \textbf{Odds ratio (lectura bancaria):} si el OR de una categoría es $>1$, en esta muestra ese grupo tuvo más mora que la referencia tras el ajuste lineal; si $<1$, menos. Son \textbf{asociaciones}, no causas ni montos en soles.
-\item El modelo \textbf{ordena} la cartera para revisión manual; el comité define umbral, costos y excepciones.
+\item \texttt{score}: OR $\approx$ 0,75 por desv.\ est.\ $\rightarrow$ a mayor score, menor odds de mora en el logit.
+\item \texttt{nivel\_ahorro}: OR $\approx$ 0,75; \texttt{exp\_sf} (experiencia en el sistema financiero): OR $\approx$ 0,73.
+\item \texttt{deuda\_sf}: OR $\approx$ 1,15 $\rightarrow$ más deuda asociada a mayor odds de mora, \textbf{ceteris paribus}.
 \end{itemize}
+
+Entre categorías (referencia implícita del one-hot): \textbf{zona Loreto} OR $\approx$ 2,5; \textbf{zona Ucayali} OR $\approx$ 2,4; \textbf{nivel universitario} OR $\approx$ 0,62 frente a la referencia de educación en el ajuste. Son patrones de esta base Kaggle, no reglas para todo el Perú.
+
+El modelo \textbf{ordena} solicitudes para revisión manual; el comité fija umbral, costos y excepciones.
 
 \begin{figure}[H]
 \centering
@@ -329,20 +356,16 @@ Los coeficientes de la logística B (Figura~\ref{fig:coef}) son \textbf{asociaci
 
 \section{Despliegue básico (Streamlit)}
 
-\textbf{Por qué Streamlit.} La guía de la Fase 3 (§8.3) exige un despliegue básico y funcional y sugiere, como ejemplo, una aplicación sencilla en Streamlit. Lo elegimos porque coincide con nuestro stack (Python, \texttt{scikit-learn}, \texttt{joblib}), permite en pocos archivos cargar el mismo pipeline entrenado, recoger las 11 entradas del escenario B, aplicar los umbrales del JSON y mostrar advertencias de limitación sin montar un backend aparte. Es adecuado para la \textbf{sustentación oral} (\texttt{streamlit run} en portátil) y para que el comité vea cómo cambia la decisión al mover el umbral. No pretendemos producción bancaria ni exposición pública de la API; es una demo reproducible alineada con la rúbrica de despliegue.
+\textbf{Por qué Streamlit.} La guía de la Fase 3 (§8.3) exige un despliegue básico y funcional y sugiere, como ejemplo, una aplicación sencilla en Streamlit. Lo elegimos porque coincide con nuestro stack (Python, \texttt{scikit-learn}, \texttt{joblib}), permite cargar el pipeline serializado, recoger las 11 entradas del escenario B, aplicar umbrales exportados y mostrar advertencias sin montar un servidor aparte. Es adecuado para la \textbf{sustentación oral} en portátil y para que el comité vea cómo cambia la decisión al mover el umbral. No pretendemos producción bancaria ni exposición pública en internet; es una demo \textbf{local} alineada con la rúbrica de despliegue.
 
-Implementamos la aplicación en \texttt{codigo/app\_streamlit/}. La app carga el mismo pipeline guardado (\texttt{pipeline\_logistica\_B.joblib}), solicita las \textbf{mismas 11 variables} del escenario B, aplica imputación, escalado y las \textbf{categorías que el modelo conoció en el entrenamiento} (\texttt{handle\_unknown=infrequent}), y lee los umbrales de \texttt{umbrales\_recomendados.json}. La salida es el índice de riesgo relativo y la clase según el corte (0,50, Youden, costo 1$\times$, 2$\times$ o 5$\times$). La interfaz muestra limitaciones en el panel lateral y, si el usuario elige costo 2$\times$ o 5$\times$, advierte que ese corte marca riesgo a casi todos (casi equivalente a rechazar a todos). Requiere \textbf{scikit-learn 1.9.1} e \textbf{imbalanced-learn 0.14.2} (ver README de la app).
+La demo local sigue la misma estructura que el paquete de entrega del curso (detalle en \texttt{LEEME.md}): raíz del proyecto con \texttt{datos/database.csv}; bajo \texttt{codigo/}, la carpeta \texttt{salidas\_tercera/} con \texttt{pipeline\_logistica\_B.joblib} y \texttt{umbrales\_recomendados.json}; y \texttt{codigo/app\_streamlit/} con \texttt{app.py} y \texttt{paths.py}, que resuelven esas rutas automáticamente. La app pide las \textbf{11 variables} del escenario B, aplica el mismo preprocesamiento y muestra el score y la clase (0,50, Youden, costo 1$\times$/2$\times$/5$\times$). Si el usuario elige costo 2$\times$ o 5$\times$, aparece aviso de que el corte marca riesgo a casi todos. Versiones usadas al serializar: \textbf{scikit-learn 1.9.1}, \textbf{imbalanced-learn 0.14.2}.
 
-\textbf{Ejecución local:}
-\begin{verbatim}
-pip install -r codigo/app_streamlit/requirements.txt
-streamlit run codigo/app_streamlit/app.py
-\end{verbatim}
+\textbf{Ejecución:} desde \texttt{codigo/app\_streamlit/}, con dependencias instaladas (\texttt{requirements.txt} en la raíz del paquete), ejecutar \texttt{streamlit run app.py}.
 
 \begin{figure}[H]
 \centering
 \capturaapp
-\caption{Vista de la aplicación Streamlit (captura en \texttt{captura\_streamlit.png}).}
+\caption{Captura \textbf{local} de la demo Streamlit: perfil ingresado manualmente, umbral Youden OOF ($t \approx 0{,}71$), resultado calculado (índice de riesgo 0,790; decisión según ese corte).}
 \label{fig:app}
 \end{figure}
 
@@ -350,7 +373,7 @@ streamlit run codigo/app_streamlit/app.py
 
 \begin{itemize}
 \item Con información previamente disponible y escenario B, la logística \textbf{ordena} mejor que la línea base (AUC $\approx$0,72, discriminación moderada).
-\item El problema de negocio relevante es el \textbf{umbral}. Con $r=5$ la regla óptima en OOF casi coincide con la línea base. Con $r=1$ o Youden el modelo sí cambia el equilibrio de errores y sigue valiendo para \textbf{priorizar} por score.
+\item El problema de negocio relevante es el \textbf{umbral}. Con $r=5$ (y en la práctica $r=2$) el corte óptimo en OOF casi no mejora rechazar a todos en \textbf{costo}. Solo con $r=1$ el costo simbólico baja de forma clara ($\approx$7,6\%). \textbf{Youden} reparte FN/FP pero no ahorra $C$ frente a la línea base. El score sigue valiendo para \textbf{priorizar} por riesgo relativo.
 \item \textbf{Recomendamos} usar el score del modelo para priorización interna en muestras similares si el comité acepta las limitaciones de temporalidad, prevalencia y \texttt{score}.
 \item \textbf{No recomendamos} comunicar \texttt{predict\_proba} como probabilidad poblacional de mora en Perú ni tomar nuevas decisiones de modelo con el mismo test.
 \end{itemize}
@@ -359,7 +382,7 @@ streamlit run codigo/app_streamlit/app.py
 
 \section*{Declaración de uso de inteligencia artificial}
 
-Usamos el modelo de lenguaje \textbf{Claude (Sonnet 5)} de Anthropic, accedido vía Cursor, como apoyo para código, tablas y borradores del informe. El equipo revisó, ajustó y es responsable del contenido. El planteamiento, la base, las variables, el modelo final y la lectura de resultados son nuestros.
+\textbf{Juan Angel Triana} usó \textbf{Claude (Sonnet 5)} vía Cursor para apoyo en código Python, notebook, aplicación Streamlit, tablas y borradores del informe. \textbf{Isabella Pensamiento} usó \textbf{Claude (Sonnet 5)} para revisar el informe, preparar diapositivas y guion de sustentación. Herramientas: Cursor IDE; \texttt{Python 3.12}; \texttt{scikit-learn 1.9.1}; \texttt{imbalanced-learn 0.14.2}; Streamlit $\geq$1.28. El equipo revisó, ajustó y es responsable del contenido técnico y de las decisiones del proyecto.
 
 \section*{Referencias}
 
