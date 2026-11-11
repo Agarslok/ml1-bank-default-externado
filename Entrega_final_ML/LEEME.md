@@ -56,3 +56,18 @@ streamlit run app.py
 La app lee `codigo/salidas_tercera/pipeline_logistica_B.joblib`, `umbrales_recomendados.json` y `datos/database.csv`.
 
 Si falta el pipeline, ejecuta el notebook hasta el final o copia de nuevo los archivos de `salidas_tercera/`.
+
+## Publicar en internet (enlace para cualquiera)
+
+Opción recomendada: **Streamlit Community Cloud** (gratis).
+
+1. Sube el proyecto a **GitHub** (repositorio público). No subas `.venv/`. Deben ir `datos/database.csv`, `codigo/salidas_tercera/*` y `codigo/app_streamlit/`.
+2. Entra en [share.streamlit.io](https://share.streamlit.io), inicia sesión con GitHub y **Create app**.
+3. Repo, rama `main`, archivo principal: `codigo/app_streamlit/app.py`.
+4. Deploy. Obtendrás un enlace del tipo `https://nombre-app.streamlit.app`.
+
+**Si el repo en GitHub tiene la carpeta `Entrega_final_ML/` dentro** (no es la raíz del repo), Streamlit **no** lee
+`Entrega_final_ML/requirements.txt` y verás errores como `ModuleNotFoundError: joblib`.
+Solución: crea `requirements.txt` en la **raíz del repositorio** (véase `requirements-raiz-github.txt`) y vuelve a desplegar.
+
+Para Jupyter en local: `pip install -r requirements-dev.txt` además de `requirements.txt`.

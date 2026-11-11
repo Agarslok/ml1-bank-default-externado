@@ -1,0 +1,14 @@
+# Pégalo en la RAÍZ del repo de GitHub (ml1-bank-default-externado/requirements.txt),
+# NO dentro de Entrega_final_ML. Streamlit Cloud solo lee ese archivo en la raíz.
+#
+# Opción A — incluir dependencias aquí (recomendado, más simple):
+streamlit>=1.28
+pandas>=1.5
+numpy>=1.23
+scikit-learn==1.9.1
+imbalanced-learn==0.14.2
+joblib>=1.3
+matplotlib>=3.7
+
+# Opción B — si prefieres un solo requirements dentro de Entrega_final_ML:
+# -r Entrega_final_ML/requirements.txt
